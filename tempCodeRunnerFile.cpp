@@ -71,7 +71,6 @@ int main()
 	ifstream student_file("students.txt");
 	ifstream course_file("courses.txt");
 	vector<student> allstudents;
-
 	vector<course> allcourses;
 
 	string textline;
@@ -79,18 +78,10 @@ int main()
 	while (getline(student_file, textline))
 	{
 		student s;
-
-		int p1 = 0, p2 = 0;
-
-		p2 = textline.find(',');
-		s.name = textline.substr(p1, p2);
-		p1 = p2;
-		p2 = textline.find(',', p1 + 1);
-		s.id = stoi(textline.substr(p1 + 1, p2 - 1));
-		p1 = p2;
-		p2 = textline.find(',', p1 + 1);
-		s.gender = textline[p2 - 1];
-		s.gpa = stod(textline.substr(p2 + 1, textline.size() - 1));
+		char* nameBuffer = nullptr;
+		// Use sscanf() to split the values in textline and assign those values to the members of struct s;
+		sscanf(textline.c_str(), "%s,%i,%c,%f", nameBuffer, &s.id, &s.gender, &s.gpa);
+		s.name = string(nameBuffer);
 
 		allstudents.push_back(s);
 	}
@@ -129,7 +120,7 @@ int main()
 			else
 			{
 				student *p = findstudent(allstudents, atof(textline.c_str()));
-
+				
 				// Append (push_back) p to student_list of the recently added course in allcourses[];
 				(allcourses.end() - 1)->student_list.push_back(p);
 			}
